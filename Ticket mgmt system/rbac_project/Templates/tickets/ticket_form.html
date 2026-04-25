@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-12">
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center gap-2 text-[10px] text-jira-muted font-bold uppercase tracking-widest mb-6">
+        <a href="{% url 'dashboard' %}" class="hover:text-jira-blue transition">Dashboard</a>
+        <span>/</span>
+        <a href="{% url 'ticket-list' %}" class="hover:text-jira-blue transition">Tickets</a>
+        <span>/</span>
+        <span class="text-jira-text">{% if form.instance.id %}Edit #{{ form.instance.id }}{% else %}New Object{% endif %}</span>
+    </nav>
+
+    <div class="card-jira p-10">
+        <header class="mb-8 border-b border-jira-border pb-6">
+            <h1 class="text-2xl font-bold tracking-tight text-jira-text">
+                {% if form.instance.id %}Edit Instance{% else %}Initialize New Object{% endif %}
+            </h1>
+            <p class="text-sm text-jira-muted mt-1">Provide necessary operational parameters to sync with the workspace node.</p>
+        </header>
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-sm text-sm mb-6">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <!-- Title -->
+            <div class="space-y-1.5">
+                <label for="{{ form.title.id_for_label }}" class="text-[10px] font-bold text-jira-muted uppercase tracking-widest">Instance Summary *</label>
+                {{ form.title }}
+                {% if form.title.errors %}<p class="text-red-600 text-[10px] font-bold mt-1 uppercase tracking-tighter">{{ form.title.errors.0 }}</p>{% endif %}
+            </div>
+
+            <!-- Description -->
+            <div class="space-y-1.5">
+                <label for="{{ form.description.id_for_label }}" class="text-[10px] font-bold text-jira-muted uppercase tracking-widest">Extended Metadata *</label>
+                {{ form.description }}
+                {% if form.description.errors %}<p class="text-red-600 text-[10px] font-bold mt-1 uppercase tracking-tighter">{{ form.description.errors.0 }}</p>{% endif %}
+            </div>
+
+            <!-- Priority & Status -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="space-y-1.5">
+                    <label for="{{ form.priority.id_for_label }}" class="text-[10px] font-bold text-jira-muted uppercase tracking-widest">Resolution Priority *</label>
+                    {{ form.priority }}
+                    {% if form.priority.errors %}<p class="text-red-600 text-[10px] font-bold mt-1 uppercase tracking-tighter">{{ form.priority.errors.0 }}</p>{% endif %}
+                </div>
+                {% if form.status %}
+                <div class="space-y-1.5">
+                    <label for="{{ form.status.id_for_label }}" class="text-[10px] font-bold text-jira-muted uppercase tracking-widest">Current State</label>
+                    {{ form.status }}
+                    {% if form.status.errors %}<p class="text-red-600 text-[10px] font-bold mt-1 uppercase tracking-tighter">{{ form.status.errors.0 }}</p>{% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Department & Project -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="space-y-1.5">
+                    <label for="{{ form.department.id_for_label }}" class="text-[10px] font-bold text-jira-muted uppercase tracking-widest">Workspace Node *</label>
+                    {{ form.department }}
+                    {% if form.department.errors %}<p class="text-red-600 text-[10px] font-bold mt-1 uppercase tracking-tighter">{{ form.department.errors.0 }}</p>{% endif %}
+                </div>
+                <div class="space-y-1.5">
+                    <label for="{{ form.project_name.id_for_label }}" class="text-[10px] font-bold text-jira-muted uppercase tracking-widest">Project Cluster *</label>
+                    {{ form.project_name }}
+                    {% if form.project_name.errors %}<p class="text-red-600 text-[10px] font-bold mt-1 uppercase tracking-tighter">{{ form.project_name.errors.0 }}</p>{% endif %}
+                </div>
+            </div>
+
+            <!-- Assignee -->
+            {% if form.assignee %}
+            <div class="space-y-1.5">
+                <label for="{{ form.assignee.id_for_label }}" class="text-[10px] font-bold text-jira-muted uppercase tracking-widest">Assign to Node</label>
+                {{ form.assignee }}
+                {% if form.assignee.errors %}<p class="text-red-600 text-[10px] font-bold mt-1 uppercase tracking-tighter">{{ form.assignee.errors.0 }}</p>{% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Buttons -->
+            <div class="flex items-center gap-4 pt-8 border-t border-jira-border mt-10">
+                <button type="submit" class="btn-jira-primary px-8 py-2.5 uppercase text-[11px] tracking-widest font-black">
+                    {% if form.instance.id %}Update Instance{% else %}Initialize Node{% endif %}
+                </button>
+                <a href="{% if form.instance.id %}{% url 'ticket-detail' form.instance.id %}{% else %}{% url 'ticket-list' %}{% endif %}" 
+                   class="btn-jira btn-jira-secondary px-8 py-2.5 uppercase text-[11px] tracking-widest font-bold">
+                    Abort
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Injecting Jira classes into Django form fields
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+        if (!el.classList.contains('btn-jira') && el.type !== 'hidden') {
+            el.classList.add('input-jira');
+        }
+    });
+</script>
+{% endblock %}
+

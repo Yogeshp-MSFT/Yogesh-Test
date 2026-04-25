@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}?v=2">
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}?v=2">
+    <title>Provision Tenant | Core Infrastructure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --jira-primary: #0C66E4;
+            --jira-bg: #F4F5F7;
+            --jira-sidebar: #FFFFFF;
+            --jira-border: #DFE1E6;
+            --jira-text: #172B4D;
+            --jira-muted: #6B778C;
+            --jira-hover: #EBECF0;
+            --jira-selected: #E6F0FF;
+            --jira-card: #FFFFFF;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--jira-bg);
+            color: var(--jira-text);
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--jira-text);
+            transition: background 0.1s ease-out;
+        }
+
+        .sidebar-item:hover {
+            background-color: var(--jira-hover);
+        }
+
+        .sidebar-item.active {
+            color: var(--jira-primary);
+            background-color: var(--jira-selected);
+            font-weight: 600;
+        }
+
+        .card-jira {
+            background: var(--jira-card);
+            border: 1px solid var(--jira-border);
+            border-radius: 3px;
+            padding: 24px;
+        }
+
+        .input-jira {
+            background-color: #F7F8F9;
+            border: 2px solid #DFE1E6;
+            border-radius: 3px;
+            padding: 8px 12px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .input-jira:focus {
+            background-color: #FFFFFF;
+            border-color: var(--jira-primary);
+            outline: none;
+        }
+
+        .btn-jira-primary {
+            background-color: var(--jira-primary);
+            color: white;
+            padding: 8px 16px;
+            font-weight: 600;
+            border-radius: 3px;
+            font-size: 14px;
+            transition: background 0.1s ease-out;
+        }
+
+        .btn-jira-primary:hover {
+            background-color: #0055CC;
+        }
+    </style>
+</head>
+
+<body class="flex min-h-screen">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white border-r border-jira-border fixed h-full flex flex-col z-30">
+        <div class="p-6 border-b border-jira-border mb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-slate-900 rounded-sm flex items-center justify-center text-white font-bold text-xl">S</div>
+                <span class="text-lg font-bold tracking-tight">Super<span class="text-jira-primary">Admin</span></span>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-3 space-y-1">
+             <div class="text-[10px] font-bold text-jira-muted uppercase tracking-widest px-3 mb-2">Internal Systems</div>
+             <a href="{% url 'superadmin_dashboard' %}" class="sidebar-item">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                Control Center
+            </a>
+            <a href="{% url 'manage_companies' %}" class="sidebar-item active">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                Tenant Nodes
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-jira-border bg-slate-50">
+             <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="w-full text-left text-[10px] font-bold text-jira-muted hover:text-red-600 transition flex items-center gap-2 uppercase tracking-widest">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    Logout System
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="flex-1 ml-64 p-8 flex items-center justify-center">
+        <div class="max-w-xl w-full">
+            <header class="mb-10 text-center">
+                <nav class="flex justify-center items-center gap-2 text-[10px] text-jira-muted font-bold uppercase tracking-widest mb-2">
+                    <span>Provisioning</span>
+                    <span>/</span>
+                    <span class="text-jira-text">New Cluster Deployment</span>
+                </nav>
+                <h1 class="text-2xl font-bold tracking-tight">Provision Organization</h1>
+            </header>
+
+            <div class="card-jira !p-0 overflow-hidden">
+                <div class="bg-jira-bg/50 px-8 py-4 border-b border-jira-border">
+                    <p class="text-[10px] font-bold text-jira-muted uppercase tracking-widest">Initialization Protocol</p>
+                </div>
+                
+                <div class="p-8">
+                    {% if messages %}
+                    <div class="mb-8 space-y-3">
+                        {% for message in messages %}
+                        <div class="p-4 border rounded-sm text-xs font-black uppercase tracking-tight flex items-center gap-3
+                            {% if message.tags == 'error' %}bg-red-50 border-red-100 text-red-800{% else %}bg-green-50 border-green-200 text-green-800{% endif %}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" class="space-y-6" id="provisionForm">
+                        {% csrf_token %}
+                        
+                        <div class="space-y-1.5">
+                            <label class="block text-[10px] font-black text-jira-muted uppercase tracking-widest">Organization Legal Identity</label>
+                            {{ form.company_name }}
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-black text-jira-muted uppercase tracking-widest">Root Admin Alias</label>
+                                {{ form.admin_username }}
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-black text-jira-muted uppercase tracking-widest">Liaison Email</label>
+                                {{ form.email }}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-black text-jira-muted uppercase tracking-widest">Master Key</label>
+                                {{ form.password }}
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-black text-jira-muted uppercase tracking-widest">Verify Master Key</label>
+                                {{ form.confirm_password }}
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-jira-border flex flex-col gap-3">
+                            <button type="submit" class="btn-jira-primary w-full py-4 text-[11px] font-black uppercase tracking-widest">
+                                Authorize Provisioning
+                            </button>
+                            <a href="{% url 'manage_companies' %}" class="text-center text-[10px] font-bold text-jira-muted hover:text-jira-text uppercase tracking-widest py-2 transition">Cancel Operation</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <p class="mt-8 text-center text-[9px] text-jira-muted font-bold uppercase tracking-widest">Secure Infrastructure Layer 4 Deployment Protocol active</p>
+        </div>
+    </main>
+
+    <script>
+        // Injecting Jira classes into Django form fields
+        document.querySelectorAll('#provisionForm input').forEach(el => {
+            el.classList.add('input-jira');
+        });
+    </script>
+</body>
+</html>

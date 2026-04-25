@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white rounded shadow-lg p-6 w-full max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6 text-red-600">Delete Ticket</h1>
+
+        <p class="text-lg mb-6">Are you sure you want to delete this ticket?</p>
+
+        <div class="bg-yellow-100 border-l-4 border-yellow-600 p-4 mb-6">
+            <p class="font-semibold">Ticket #{{ object.id }}: {{ object.title }}</p>
+            <p class="text-sm text-gray-700">{{ object.description }}</p>
+        </div>
+
+        <p class="text-red-600 font-semibold mb-6">This action cannot be undone.</p>
+
+        <form method="POST" class="flex gap-4">
+            {% csrf_token %}
+
+            <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">
+                Yes, Delete Ticket
+            </button>
+            <a href="{% url 'ticket-detail' object.id %}" class="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

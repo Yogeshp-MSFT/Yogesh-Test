@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}?v=2">
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}?v=2">
+    <title>Protocol Violation | Sync Suspended</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --jira-primary: #0C66E4;
+            --jira-bg: #F4F5F7;
+            --jira-border: #DFE1E6;
+            --jira-text: #172B4D;
+            --jira-muted: #6B778C;
+            --jira-card: #FFFFFF;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--jira-bg);
+            color: var(--jira-text);
+        }
+
+        .card-jira {
+            background: var(--jira-card);
+            border: 1px solid var(--jira-border);
+            border-radius: 3px;
+            padding: 40px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-jira-primary {
+            background-color: var(--jira-primary);
+            color: white;
+            padding: 10px 24px;
+            font-weight: 600;
+            border-radius: 3px;
+            font-size: 14px;
+            transition: background 0.1s ease-out;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-jira-primary:hover {
+            background-color: #0055CC;
+        }
+
+        .badge-jira-red {
+            background-color: #FFEBE6;
+            color: #BF2600;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 antialiased">
+    
+    <div class="max-w-md w-full">
+        <!-- Main Card -->
+        <div class="card-jira text-center">
+            <!-- Warning Icon -->
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-sm bg-red-50 mb-8 border border-red-100">
+                <svg class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+
+            <h1 class="text-2xl font-bold text-jira-text tracking-tight mb-4">
+                Operational Node Offline
+            </h1>
+            
+            <p class="text-jira-muted text-sm leading-relaxed mb-10 font-medium">
+                Your organizational sync has been terminated by the platform administration. Access to core dashboards and payload data is currently restricted for all cluster identities.
+            </p>
+
+            <!-- Status Detail -->
+            <div class="bg-gray-50 border border-jira-border rounded-sm p-4 mb-10 text-left">
+                <div class="flex items-start gap-3">
+                    <div class="mt-0.5">
+                        <div class="w-2 h-2 rounded-full bg-red-600"></div>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-jira-muted uppercase tracking-widest mb-1">System Intelligence</p>
+                        <p class="text-xs font-bold text-jira-text leading-tight uppercase">Manual authorization required from root infrastructure owners to restore lifecycle services.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <a href="{% url 'company_login' %}" class="btn-jira-primary w-full justify-center py-4 uppercase tracking-widest text-[11px] font-black">
+                Reconnect to Gateway
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+            </a>
+        </div>
+
+        <div class="mt-8 text-center">
+            <span class="badge-jira-red">Operational Lock Restricted</span>
+            <p class="mt-2 text-jira-muted text-[10px] font-bold uppercase tracking-widest">
+                Infrastructure Link #CXP-{{ company.id|stringformat:"04d" }}
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+

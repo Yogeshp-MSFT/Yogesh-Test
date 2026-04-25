@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}?v=2">
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}?v=2">
+    <title>Delete Identity | Tenant Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+           --primary: #05719D;
+           --secondary: #A0D5E8;
+           --accent: #D7F9FB;
+           --bg-light: #f9feff;
+           --text-dark: #033e52;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Lato', 'sans-serif'],
+                        outfit: ['Lato', 'sans-serif'],
+                        inter: ['Lato', 'sans-serif']
+                    },
+                    colors: {
+                        blue: {
+                            50: 'var(--bg-light)',
+                            100: 'var(--accent)',
+                            200: 'var(--accent)',
+                            300: 'var(--secondary)',
+                            400: 'var(--secondary)',
+                            500: 'var(--primary)',
+                            600: 'var(--primary)',
+                            700: '#045A7D',
+                            800: '#03445E',
+                            900: '#022D3E',
+                            950: '#01161F',
+                        },
+                        slate: {
+                            50: 'var(--bg-light)',
+                            100: 'var(--bg-light)',
+                            200: 'var(--bg-light)',
+                            300: 'var(--accent)',
+                            400: 'var(--secondary)',
+                            500: '#045A7D',
+                            600: '#03445E',
+                            700: 'var(--text-dark)',
+                            800: 'var(--primary)',      
+                            900: '#02212C',             
+                            950: '#011016',
+                        },
+                        gray: {
+                            50: 'var(--bg-light)',
+                            100: 'var(--bg-light)',
+                            200: 'var(--bg-light)',
+                            300: 'var(--accent)',
+                            400: 'var(--secondary)',
+                            500: '#045A7D',
+                            600: '#03445E',
+                            700: 'var(--text-dark)',
+                            800: 'var(--text-dark)',
+                            900: 'var(--text-dark)',
+                        },
+                        emerald: {
+                            500: 'var(--primary)',
+                            600: '#045A7D',
+                            700: '#03445E',
+                        },
+                        green: {
+                            500: 'var(--primary)',
+                            600: '#045A7D',
+                            700: '#03445E',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Lato', sans-serif; }
+        .font-outfit { font-family: 'Lato', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 flex font-sans min-h-screen antialiased">
+
+    <!-- Sky Blue Sidebar -->
+    <div class="w-72 bg-blue-500 text-white min-h-screen p-8 shadow-2xl transition-all fixed h-full overflow-y-auto z-20 shadow-blue-500/20 text-center">
+        <div class="mb-10">
+            <h2 class="text-3xl font-black tracking-tighter text-white font-outfit">TENANT <span class="text-blue-900">HUB</span></h2>
+            <div class="h-1 w-12 bg-white mx-auto mt-2 rounded-full shadow-lg shadow-blue-500/50"></div>
+        </div>
+
+        <div class="space-y-4 text-left">
+            <div class="text-[10px] uppercase font-black text-blue-100 tracking-widest px-2 mb-2 opacity-70">Management</div>
+            <a href="{% url 'dashboard' %}"
+                class="flex items-center gap-3 hover:bg-blue-600 p-3 rounded-xl transition text-blue-50 font-medium group">
+                <svg class="h-5 w-5 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 ml-72 flex items-center justify-center bg-blue-50 p-12 min-h-screen">
+        <div class="bg-white rounded-[3rem] shadow-2xl shadow-blue-200/50 overflow-hidden border border-blue-100 w-full max-w-md">
+            <!-- Header section -->
+            <div class="bg-rose-600 py-12 px-10 relative overflow-hidden text-center">
+                <div class="absolute right-0 top-0 h-32 w-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-black text-white tracking-tight font-outfit">Identity <span class="text-rose-100 opacity-60">PURGE</span></h2>
+                    <p class="text-rose-100 font-bold uppercase text-[10px] tracking-[0.2em] mt-2">Critical resource termination sequence</p>
+                </div>
+            </div>
+
+            <div class="p-10">
+                <div class="mb-10 p-6 bg-rose-50 border border-rose-100 rounded-3xl">
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-rose-500 rounded-2xl shadow-xl shadow-rose-500/20 text-white">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-black text-rose-600 uppercase tracking-widest mb-1">Warning</p>
+                            <p class="text-sm font-bold text-rose-900/70 leading-relaxed">This operation is irreversible. All session data for <span class="text-rose-600 font-black">{{ user.username }}</span> will be purged from the core database.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4 mb-10">
+                    <div class="flex items-center justify-between p-5 bg-blue-50 rounded-2xl border border-blue-100 group hover:border-blue-200 transition-colors">
+                        <span class="text-[9px] font-black text-blue-500 uppercase tracking-[0.2em]">Target Identity</span>
+                        <span class="text-sm font-black text-blue-900">{{ user.username }}</span>
+                    </div>
+                    <div class="flex items-center justify-between p-5 bg-blue-50 rounded-2xl border border-blue-100 group hover:border-blue-200 transition-colors">
+                        <span class="text-[9px] font-black text-blue-500 uppercase tracking-[0.2em]">Protocol Role</span>
+                        <div class="flex items-center gap-2">
+                             <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                             <span class="text-sm font-black text-blue-600">{{ user.get_role_display }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="POST" class="flex flex-col gap-4">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full bg-rose-600 text-white py-5 px-6 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-rose-700 transition-all shadow-2xl shadow-rose-500/30 active:scale-95 border border-white/10">
+                        Confirm Permanent Purge
+                    </button>
+                    <a href="{% url 'dashboard' %}" class="w-full bg-slate-100 text-slate-500 py-5 px-6 rounded-2xl font-black uppercase tracking-widest text-[10px] text-center hover:bg-slate-200 transition-all active:scale-95">
+                        Abort Protocol
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

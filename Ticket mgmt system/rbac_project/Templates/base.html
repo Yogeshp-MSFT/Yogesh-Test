@@ -1,0 +1,212 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}?v=2">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon/favicon-16x16.png' %}?v=2">
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}?v=2">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon/apple-touch-icon.png' %}?v=2">
+    <title>{% block title %}RBAC Project{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            /* Jira-inspired Color Palette */
+            --jira-primary: #0C66E4;
+            --jira-bg: #F4F5F7;
+            --jira-card: #FFFFFF;
+            --jira-border: #DFE1E6;
+            --jira-hover: #EBECF0;
+            --jira-heading: #172B4D;
+            --jira-body: #44546F;
+            --jira-muted: #6B778C;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--jira-bg);
+            color: var(--jira-body);
+        }
+
+        /* Jira Design Tokens */
+        .btn-jira {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 12px;
+            font-weight: 500;
+            border-radius: 3px; /* Jira uses a very small radius */
+            transition: background 0.1s ease-out;
+            cursor: pointer;
+            font-size: 14px;
+            border: none;
+        }
+
+        .btn-jira-primary {
+            background-color: var(--jira-primary);
+            color: white;
+        }
+
+        .btn-jira-primary:hover {
+            background-color: #0055CC;
+        }
+
+        .btn-jira-secondary {
+            background-color: rgba(9, 30, 66, 0.04);
+            color: var(--jira-heading);
+        }
+
+        .btn-jira-secondary:hover {
+            background-color: rgba(9, 30, 66, 0.08);
+        }
+
+        .input-jira {
+            background-color: #F7F8F9;
+            border: 2px solid #DFE1E6;
+            border-radius: 3px;
+            padding: 8px 12px;
+            color: var(--jira-heading);
+            font-size: 14px;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .input-jira:focus {
+            background-color: white;
+            border-color: var(--jira-primary);
+            outline: none;
+        }
+
+        .card-jira {
+            background: white;
+            border: 1px solid var(--jira-border);
+            border-radius: 3px;
+            box-shadow: none;
+        }
+
+        .table-jira {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-jira thead {
+            background-color: var(--jira-bg);
+            border-bottom: 2px solid var(--jira-border);
+        }
+
+        .table-jira th {
+            color: var(--jira-muted);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 12px 16px;
+            text-align: left;
+            letter-spacing: 0.05em;
+            vertical-align: middle;
+        }
+
+        .table-jira td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--jira-border);
+            font-size: 14px;
+            vertical-align: middle;
+            color: var(--jira-heading);
+        }
+
+        .table-jira tr:hover {
+            background-color: var(--jira-hover);
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--jira-heading);
+            font-weight: 600;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        jira: {
+                            blue: '#0C66E4',
+                            gray: '#F4F5F7',
+                            border: '#DFE1E6',
+                            text: '#172B4D',
+                            muted: '#6B778C',
+                        }
+                    },
+                    borderRadius: {
+                        'jira': '3px',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-jira-border shadow-sm sticky top-0 z-50">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-10">
+            <div class="flex justify-between h-14 items-center">
+                <div class="flex items-center gap-6">
+                    <a href="{% url 'home' %}" class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-jira-blue rounded-jira flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M11.5 21l-7.5-7.5 1.4-1.4 6.1 6.1V3h2v15.2l6.1-6.1 1.4 1.4L12.5 21H11.5z"/>
+                            </svg>
+                        </div>
+                        <span class="text-lg font-bold text-jira-text tracking-tight">RBAC <span class="text-jira-blue">System</span></span>
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    {% if user.is_authenticated %}
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-medium text-jira-muted">{{ user.username }}</span>
+                            <div class="w-8 h-8 rounded-full bg-jira-blue/10 flex items-center justify-center text-jira-blue text-xs font-bold uppercase">
+                                {{ user.username|make_list|first }}
+                            </div>
+                            <form method="POST" action="{% url 'logout' %}" class="inline">
+                                {% csrf_token %}
+                                <button type="submit" class="text-sm text-jira-muted hover:text-jira-text px-3 py-1 rounded hover:bg-jira-gray transition-colors">Logout</button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-sm font-medium text-jira-text hover:text-jira-blue transition-colors">Login</a>
+                        <a href="{% url 'register' %}" class="bg-jira-blue text-white px-4 py-2 rounded-jira text-sm font-bold hover:bg-blue-700 transition-all">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="max-w-[1600px] mx-auto px-4 mt-4 lg:px-10">
+        {% for message in messages %}
+        <div class="p-3 rounded-jira text-sm border shadow-sm flex items-center gap-3 
+            {% if message.tags == 'success' %}bg-green-50 border-green-200 text-green-700
+            {% elif message.tags == 'error' %}bg-red-50 border-red-200 text-red-700
+            {% else %}bg-blue-50 border-blue-200 text-blue-700{% endif %}">
+            <span class="font-bold uppercase text-[10px]">{{ message.tags }}</span>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="min-h-[calc(100vh-140px)]">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-jira-border py-8 mt-12">
+        <div class="max-w-[1600px] mx-auto px-4 text-center lg:px-10">
+            <p class="text-xs text-jira-muted font-medium uppercase tracking-widest">&copy; 2026 RBAC Core Engineering • Professional Operations</p>
+        </div>
+    </footer>
+</body>
+</html>
+

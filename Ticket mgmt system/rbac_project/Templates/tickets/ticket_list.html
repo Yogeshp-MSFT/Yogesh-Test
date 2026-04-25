@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-[1600px] mx-auto px-4 py-8 lg:px-10">
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center gap-2 text-[10px] text-jira-muted font-bold uppercase tracking-widest mb-6">
+        <a href="{% url 'dashboard' %}" class="hover:text-jira-blue transition">Dashboard</a>
+        <span>/</span>
+        <span class="text-jira-text">Tickets</span>
+    </nav>
+
+    <div class="flex flex-col md:flex-row justify-between items-start mb-8 gap-6">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight mb-1">Queue Management</h1>
+            <p class="text-sm text-jira-muted">Review and manage active service requests across workspace nodes.</p>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <form method="get" class="flex-grow min-w-[300px]">
+                <div class="relative">
+                    <input type="text" name="q" placeholder="Search by title, department, or project..." 
+                        value="{{ search_query }}" 
+                        class="input-jira pl-10 h-10">
+                    <svg class="w-4 h-4 text-jira-muted absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+            </form>
+            
+            {% if can_create_ticket %}
+            <a href="{% url 'ticket-create' %}" class="btn-jira-primary h-10 px-6 flex items-center justify-center gap-2 uppercase text-[11px] tracking-widest">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Create
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if tickets %}
+    <div class="card-jira !p-0 overflow-hidden">
+        <table class="table-jira w-full">
+            <thead>
+                <tr class="border-b border-jira-border">
+                    <th class="w-[8%] py-4 px-6 text-[11px] font-bold text-jira-muted uppercase tracking-widest text-left">UID</th>
+                    <th class="w-[20%] py-4 px-6 text-[11px] font-bold text-jira-muted uppercase tracking-widest text-left">Subject</th>
+                    <th class="w-[12%] py-4 px-6 text-[11px] font-bold text-jira-muted uppercase tracking-widest text-left">Department</th>
+                    <th class="w-[10%] py-4 px-6 text-[11px] font-bold text-jira-muted uppercase tracking-widest text-left">Priority</th>
+                    <th class="w-[10%] py-4 px-6 text-[11px] font-bold text-jira-muted uppercase tracking-widest text-left">State</th>
+                    <th class="w-[15%] py-4 px-6 text-[11px] font-bold text-jira-muted uppercase tracking-widest text-left">Assignee</th>
+                    <th class="w-[12%] py-4 px-6 text-[11px] font-bold text-jira-muted uppercase tracking-widest text-left">Created</th>
+                    <th class="w-[13%] py-4 px-6 text-[11px] font-bold text-jira-muted uppercase tracking-widest text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-jira-border">
+                {% for ticket in tickets %}
+                <tr class="hover:bg-jira-bg/50 transition-colors">
+                    <td class="py-4 px-6 font-mono text-[11px] font-bold text-jira-muted">#{{ ticket.id }}</td>
+                    <td class="py-4 px-6">
+                        <a href="{% url 'ticket-detail' ticket.id %}" class="font-bold text-jira-text hover:text-jira-blue transition leading-tight">{{ ticket.title }}</a>
+                    </td>
+                    <td class="py-4 px-6">
+                        <span class="inline-flex items-center text-[10px] font-bold text-jira-muted bg-jira-bg px-2 py-0.5 rounded-sm border border-jira-border uppercase tracking-tight">{{ ticket.department|default:"ROOT" }}</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-sm text-[10px] font-black uppercase tracking-tighter border
+                            {% if ticket.priority == 'CRITICAL' %}bg-red-50 text-red-700 border-red-100
+                            {% elif ticket.priority == 'HIGH' %}bg-orange-50 text-orange-700 border-orange-100
+                            {% elif ticket.priority == 'MID' %}bg-yellow-50 text-yellow-700 border-yellow-100
+                            {% else %}bg-blue-50 text-blue-700 border-blue-100
+                            {% endif %}">
+                            {{ ticket.get_priority_display }}
+                        </span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-sm text-[10px] font-black uppercase tracking-tighter border
+                            {% if ticket.status == 'OPEN' %}bg-blue-50 text-blue-700 border-blue-100
+                            {% elif ticket.status == 'IN_PROGRESS' %}bg-amber-50 text-amber-700 border-amber-100
+                            {% elif ticket.status == 'RESOLVED' %}bg-green-50 text-green-700 border-green-100
+                            {% else %}bg-slate-50 text-slate-600 border-slate-200
+                            {% endif %}">
+                            {{ ticket.get_status_display }}
+                        </span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                             <div class="w-6 h-6 rounded-sm bg-jira-blue text-white flex items-center justify-center text-[9px] font-black uppercase">
+                                {{ ticket.assignee.username|default:"?" | slice:":1" }}
+                             </div>
+                             <span class="text-xs font-bold text-jira-text">{{ ticket.assignee.username|default:"Unassigned" }}</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-6 text-xs font-bold text-jira-muted uppercase">{{ ticket.created_at|date:"M d, Y" }}</td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center justify-center gap-2">
+                             <a href="{% url 'ticket-detail' ticket.id %}" 
+                                class="px-3 py-1 bg-white border border-jira-border rounded-sm text-[10px] font-bold text-jira-text hover:bg-jira-bg transition uppercase tracking-widest whitespace-nowrap">
+                                View
+                             </a>
+                             {% if user.is_superuser or user.role in 'ADMIN COMPANY_ADMIN MANAGER' %}
+                             <a href="{% url 'ticket-delete' ticket.id %}" 
+                                class="px-3 py-1 bg-white border border-red-200 rounded-sm text-[10px] font-bold text-red-600 hover:bg-red-50 transition uppercase tracking-widest whitespace-nowrap">
+                                Delete
+                             </a>
+                             {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+    <div class="mt-8 flex justify-center items-center gap-1">
+        {% if page_obj.has_previous %}
+        <a href="?page=1{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1.5 border border-jira-border rounded-sm hover:bg-jira-bg text-xs font-bold transition">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1.5 border border-jira-border rounded-sm hover:bg-jira-bg text-xs font-bold transition">Previous</a>
+        {% endif %}
+
+        <span class="px-4 py-1.5 text-xs font-bold text-jira-muted uppercase tracking-widest border-x border-jira-border">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1.5 border border-jira-border rounded-sm hover:bg-jira-bg text-xs font-bold transition">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&q={{ search_query }}{% endif %}" class="px-3 py-1.5 border border-jira-border rounded-sm hover:bg-jira-bg text-xs font-bold transition">Last</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="card-jira p-20 text-center">
+        <div class="w-16 h-16 bg-jira-bg rounded-jira flex items-center justify-center mx-auto mb-4 text-jira-muted">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3 class="text-lg font-bold mb-1">Queue is Empty</h3>
+        <p class="text-sm text-jira-muted mb-6">No matching records were detected in the current node context.</p>
+        <a href="{% url 'ticket-list' %}" class="btn-jira btn-jira-secondary px-6">Clear All Filters</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

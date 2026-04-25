@@ -1,0 +1,196 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}?v=2">
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}?v=2">
+    <title>Company Registration | Professional SaaS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --jira-primary: #0C66E4;
+            --jira-bg: #F4F5F7;
+            --jira-border: #DFE1E6;
+            --jira-text: #172B4D;
+            --jira-muted: #6B778C;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--jira-bg);
+            color: var(--jira-text);
+        }
+
+        .card-jira {
+            background: white;
+            border: 1px solid var(--jira-border);
+            border-radius: 3px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(23, 43, 77, 0.1);
+        }
+
+        .input-jira {
+            background-color: #F7F8F9;
+            border: 2px solid #DFE1E6;
+            border-radius: 3px;
+            padding: 10px 12px;
+            font-size: 14px;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .input-jira:focus {
+            background-color: white;
+            border-color: var(--jira-primary);
+            outline: none;
+        }
+
+        .btn-jira-primary {
+            background-color: var(--jira-primary);
+            color: white;
+            padding: 10px 16px;
+            font-weight: 600;
+            border-radius: 3px;
+            width: 100%;
+            transition: background 0.1s ease-out;
+        }
+
+        .btn-jira-primary:hover {
+            background-color: #0055CC;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6 py-12">
+    <div class="w-full max-w-2xl px-6">
+        <!-- Brand Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-12 h-12 bg-jira-primary rounded-sm mb-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                    </path>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight">Organization <span class="text-[#0C66E4]">Setup</span></h1>
+            <p class="text-jira-muted text-xs font-bold uppercase tracking-widest mt-2">Initialize your private enterprise instance</p>
+        </div>
+
+        <!-- Signup Card -->
+        <div class="card-jira">
+            {% if messages %}
+            <div class="space-y-3 mb-6">
+                {% for message in messages %}
+                <div class="p-3 bg-red-50 border border-red-100 text-red-700 rounded-sm text-sm font-medium flex items-center gap-3">
+                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Company Name -->
+                    <div class="md:col-span-2 border-b border-jira-border pb-2 mb-2">
+                        <h3 class="text-sm font-bold text-jira-text uppercase tracking-wider">Entity Details</h3>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-jira-muted uppercase tracking-wider mb-2">Company Name</label>
+                        {{ form.company_name }}
+                        {% if form.company_name.errors %}
+                            <p class="text-red-500 text-[10px] mt-1 font-bold uppercase">{{ form.company_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="md:col-span-2 border-b border-jira-border pb-2 mb-2 mt-4">
+                        <h3 class="text-sm font-bold text-jira-text uppercase tracking-wider">Root Administrator</h3>
+                    </div>
+
+                    <!-- Admin Username -->
+                    <div>
+                        <label class="block text-xs font-bold text-jira-muted uppercase tracking-wider mb-2">Admin Username</label>
+                        {{ form.admin_username }}
+                        {% if form.admin_username.errors %}
+                            <p class="text-red-500 text-[10px] mt-1 font-bold uppercase">{{ form.admin_username.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Admin Email -->
+                    <div>
+                        <label class="block text-xs font-bold text-jira-muted uppercase tracking-wider mb-2">Work Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <p class="text-red-500 text-[10px] mt-1 font-bold uppercase">{{ form.email.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label class="block text-xs font-bold text-jira-muted uppercase tracking-wider mb-2">Password</label>
+                        {{ form.password }}
+                        {% if form.password.errors %}
+                            <p class="text-red-500 text-[10px] mt-1 font-bold uppercase">{{ form.password.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div>
+                        <label class="block text-xs font-bold text-jira-muted uppercase tracking-wider mb-2">Verify Password</label>
+                        {{ form.confirm_password }}
+                        {% if form.confirm_password.errors %}
+                            <p class="text-red-500 text-[10px] mt-1 font-bold uppercase">{{ form.confirm_password.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="pt-6">
+                    <button type="submit" class="btn-jira-primary uppercase text-xs tracking-widest py-4">
+                        Create Private Instance
+                    </button>
+                    <p class="text-center text-[10px] text-jira-muted font-medium mt-4 uppercase tracking-tighter">
+                        By clicking, you agree to our professional terms of service.
+                    </p>
+                </div>
+            </form>
+
+            <div class="mt-8 pt-6 border-t border-jira-border text-center flex flex-col gap-4">
+                <p class="text-xs text-jira-muted font-bold uppercase tracking-wider">Existing Instance Owner?</p>
+                <a href="{% url 'company_login' %}" class="text-sm font-bold text-[#0C66E4] hover:underline">
+                    Login to Tenant Portal
+                </a>
+                
+                <a href="{% url 'home' %}" class="text-[10px] font-bold text-jira-muted hover:text-jira-text uppercase tracking-widest flex items-center justify-center gap-1 mt-2">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+
+        <p class="text-center mt-10 text-jira-muted text-[10px] font-bold tracking-[0.2em] uppercase">
+            &copy; 2026 Core Engineering
+        </p>
+    </div>
+
+    <script>
+        // Apply Jira styles to form inputs generated by Django
+        document.querySelectorAll('input').forEach(input => {
+            if (input.type !== 'submit' && input.type !== 'hidden') {
+                input.classList.add('input-jira');
+                if (input.name === 'company_name') input.placeholder = 'e.g. Acme Corp';
+                if (input.name === 'admin_username') input.placeholder = 'admin_username';
+                if (input.name === 'email') input.placeholder = 'admin@acme.com';
+                if (input.name === 'password') input.placeholder = '••••••••';
+                if (input.name === 'confirm_password') input.placeholder = '••••••••';
+            }
+        });
+    </script>
+</body>
+</html>
+

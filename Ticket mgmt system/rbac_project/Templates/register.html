@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}?v=2">
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}?v=2">
+    <title>Initialize Identity | Core Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --jira-primary: #0C66E4;
+            --jira-bg: #F4F5F7;
+            --jira-border: #DFE1E6;
+            --jira-text: #172B4D;
+            --jira-muted: #6B778C;
+            --jira-card: #FFFFFF;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--jira-bg);
+            color: var(--jira-text);
+        }
+
+        .card-jira {
+            background: var(--jira-card);
+            border: 1px solid var(--jira-border);
+            border-radius: 3px;
+            padding: 40px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-jira {
+            background-color: #F7F8F9;
+            border: 2px solid #DFE1E6;
+            border-radius: 3px;
+            padding: 10px 12px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .input-jira:focus {
+            background-color: #FFFFFF;
+            border-color: var(--jira-primary);
+            outline: none;
+        }
+
+        .btn-jira-primary {
+            background-color: var(--jira-primary);
+            color: white;
+            padding: 12px 24px;
+            font-weight: 600;
+            border-radius: 3px;
+            font-size: 14px;
+            transition: background 0.1s ease-out;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-jira-primary:hover {
+            background-color: #0055CC;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--jira-primary);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 antialiased">
+    <div class="w-full max-w-lg">
+        <!-- Brand Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-jira-text tracking-tight mb-2">Initialize Account</h1>
+            <p class="text-jira-muted font-bold text-[10px] uppercase tracking-[0.2em]">Scalable Identity Management Cluster</p>
+        </div>
+
+        <div class="card-jira">
+            <form method="POST" class="space-y-6" id="registerForm">
+                {% csrf_token %}
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="space-y-1.5">
+                        <label class="block text-[10px] font-black text-jira-muted uppercase tracking-widest">Global Alias</label>
+                        {{ form.username }}
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="block text-[10px] font-black text-jira-muted uppercase tracking-widest">Liaison Email</label>
+                        {{ form.email }}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="space-y-1.5">
+                        <label class="block text-[10px] font-black text-jira-muted uppercase tracking-widest">Secure Credentials</label>
+                        {{ form.password1 }}
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="block text-[10px] font-black text-jira-muted uppercase tracking-widest">Verify Secure Key</label>
+                        {{ form.password2 }}
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="block text-[10px] font-black text-jira-muted uppercase tracking-widest">Operational Contact</label>
+                    {{ form.contact }}
+                </div>
+
+                <div class="bg-gray-50 p-4 border border-jira-border rounded-sm flex items-center justify-between">
+                    <label class="flex items-center cursor-pointer select-none">
+                        {{ form.whatsapp_available }}
+                        <span class="ml-3 text-[11px] font-bold text-jira-text uppercase tracking-tight">Enable WhatsApp Sync</span>
+                    </label>
+                    <svg class="h-4 w-4 text-emerald-600" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-4.421 7.452l-.007-.006a9.852 9.852 0 01-4.704-1.19l-.337-.199-3.498.917.933-3.41-.219-.348a9.851 9.851 0 01-1.513-5.257c0-5.43 4.42-9.85 9.851-9.85 2.63 0 5.101 1.025 6.96 2.885 1.859 1.86 2.885 4.329 2.885 6.965 0 5.431-4.421 9.852-9.851 9.852m6.964-16.732a11.66 11.66 0 00-8.213-3.406C6.4 1.706 1.706 6.4 1.706 12.133c0 1.833.479 3.623 1.39 5.231L1.03 21.6 5.3 20.481a11.583 11.583 0 00 5.433 1.368h.005c5.732 0 10.426-4.693 10.426-10.426 0-2.778-1.082-5.39-3.047-7.354"/></svg>
+                </div>
+
+                <div class="pt-6">
+                    <button type="submit" class="w-full btn-jira-primary justify-center py-4 uppercase tracking-[0.2em] text-[11px] font-black">
+                        Commit Initialization
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-8 pt-8 border-t border-jira-border text-center">
+                <p class="text-[10px] text-jira-muted font-bold uppercase tracking-widest mb-3">Legacy Identity Exists?</p>
+                <a href="{% url 'login' %}" class="inline-flex items-center gap-2 text-jira-primary font-bold hover:underline transition text-xs uppercase tracking-tight">
+                    Return to Authentication Gateway
+                </a>
+            </div>
+        </div>
+
+        <p class="text-center mt-10 text-jira-muted text-[10px] font-bold tracking-[0.2em] uppercase">
+            &copy; 2026 RBAC Core Engineering Distribution
+        </p>
+    </div>
+
+    <script>
+        // Injecting Jira classes into Django form fields
+        document.querySelectorAll('#registerForm input').forEach(el => {
+            if (el.type !== 'checkbox' && el.type !== 'hidden') {
+                el.classList.add('input-jira');
+            }
+        });
+    </script>
+</body>
+</html>

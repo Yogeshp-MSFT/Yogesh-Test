@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}?v=2">
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}?v=2">
+    <title>Tenant Portal | Professional Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --jira-primary: #0C66E4;
+            --jira-bg: #F4F5F7;
+            --jira-border: #DFE1E6;
+            --jira-text: #172B4D;
+            --jira-muted: #6B778C;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--jira-bg);
+            color: var(--jira-text);
+        }
+
+        .card-jira {
+            background: white;
+            border: 1px solid var(--jira-border);
+            border-radius: 3px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(23, 43, 77, 0.1);
+        }
+
+        /* 🛡️ DIRECT INPUT STYLING (Ensure visibility) */
+        input[type="text"], 
+        input[type="password"], 
+        input[type="email"],
+        .input-jira {
+            background-color: #F4F5F7 !important;
+            border: 2px solid #DFE1E6 !important;
+            border-radius: 3px !important;
+            padding: 12px 14px !important;
+            font-size: 14px !important;
+            width: 100% !important;
+            transition: all 0.2s ease !important;
+            box-sizing: border-box !important;
+            color: var(--jira-text) !important;
+            display: block !important;
+        }
+
+        input[type="text"]:focus, 
+        input[type="password"]:focus, 
+        input[type="email"]:focus,
+        .input-jira:focus {
+            background-color: white !important;
+            border-color: var(--jira-primary) !important;
+            box-shadow: 0 0 0 2px rgba(12, 102, 228, 0.2) !important;
+            outline: none !important;
+        }
+
+        .btn-jira-primary {
+            background-color: var(--jira-primary);
+            color: white;
+            padding: 12px 16px;
+            font-weight: 600;
+            border-radius: 3px;
+            width: 100%;
+            transition: background 0.1s ease-out;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-jira-primary:hover {
+            background-color: #0055CC;
+        }
+
+        .btn-jira-secondary {
+            background-color: rgba(9, 30, 66, 0.04);
+            color: var(--jira-text);
+            padding: 10px 16px;
+            font-weight: 600;
+            border-radius: 3px;
+            width: 100%;
+            transition: background 0.1s ease-out;
+            text-align: center;
+        }
+
+        .btn-jira-secondary:hover {
+            background-color: rgba(9, 30, 66, 0.08);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+    <div class="w-full max-w-md">
+        <!-- Brand Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-12 h-12 bg-jira-primary rounded-sm mb-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                    </path>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight">Tenant <span class="text-[#0C66E4]">Portal</span></h1>
+            <p class="text-jira-muted text-xs font-bold uppercase tracking-widest mt-2">Secure Organization Access</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="card-jira">
+            {% if messages %}
+            <div class="space-y-3 mb-6">
+                {% for message in messages %}
+                <div class="p-3 bg-red-50 border border-red-100 text-red-700 rounded-sm text-sm font-medium flex items-center gap-3">
+                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+
+                <div>
+                    <label class="block text-xs font-bold text-jira-muted uppercase tracking-wider mb-2">Access Identity</label>
+                    {{ form.username }}
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-jira-muted uppercase tracking-wider mb-2">Security Token</label>
+                    {{ form.password }}
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="btn-jira-primary uppercase text-xs tracking-widest">
+                        Authorize Session
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-8 pt-6 border-t border-jira-border flex flex-col gap-4 text-center">
+                <a href="{% url 'company_signup' %}" class="btn-jira-secondary text-xs uppercase tracking-widest">
+                    Register New Company
+                </a>
+
+                <div class="flex flex-col gap-3">
+                    <a href="{% url 'login' %}" class="text-sm font-bold text-[#0C66E4] hover:underline">
+                        Switch to SuperAdmin login
+                    </a>
+                    
+                    <a href="{% url 'home' %}" class="text-[10px] font-bold text-jira-muted hover:text-jira-text uppercase tracking-widest flex items-center justify-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                        Back to Home Page
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <p class="text-center mt-10 text-jira-muted text-[10px] font-bold tracking-[0.2em] uppercase">
+            &copy; 2026 Core Engineering
+        </p>
+    </div>
+
+    <script>
+        // Apply Jira styles to form inputs generated by Django
+        document.querySelectorAll('input').forEach(input => {
+            if (input.type !== 'submit' && input.type !== 'hidden') {
+                input.classList.add('input-jira');
+                if (input.name === 'username') input.placeholder = 'e.g. employee@company.io';
+                if (input.name === 'password') input.placeholder = '••••••••';
+            }
+        });
+    </script>
+</body>
+</html>

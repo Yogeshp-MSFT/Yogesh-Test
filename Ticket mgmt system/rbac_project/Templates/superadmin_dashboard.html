@@ -1,0 +1,214 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon/favicon-32x32.png' %}?v=2">
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.ico' %}?v=2">
+    <title>Platform Dashboard | SuperAdmin Oversight</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --jira-primary: #0C66E4;
+            --jira-bg: #F4F5F7;
+            --jira-sidebar: #FFFFFF;
+            --jira-border: #DFE1E6;
+            --jira-text: #172B4D;
+            --jira-muted: #6B778C;
+            --jira-hover: #EBECF0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--jira-bg);
+            color: var(--jira-text);
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--jira-text);
+            transition: background 0.1s ease-out;
+        }
+
+        .sidebar-item:hover {
+            background-color: var(--jira-hover);
+        }
+
+        .sidebar-item.active {
+            color: var(--jira-primary);
+            background-color: #E6F0FF;
+        }
+
+        .card-jira {
+            background: white;
+            border: 1px solid var(--jira-border);
+            border-radius: 3px;
+            padding: 24px;
+        }
+
+        .btn-jira-primary {
+            background-color: var(--jira-primary);
+            color: white;
+            padding: 8px 12px;
+            font-weight: 600;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .btn-jira-primary:hover {
+            background-color: #0055CC;
+        }
+
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+
+    <!-- 🏗️ SIDEBAR -->
+    <aside class="w-64 bg-white border-r border-jira-border fixed h-full flex flex-col z-30">
+        <div class="p-6 border-b border-jira-border mb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-jira-primary rounded-sm flex items-center justify-center text-white font-bold text-xl">P</div>
+                <span class="text-lg font-bold tracking-tight">Platform <span class="text-[#0C66E4]">Hub</span></span>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-3 space-y-1">
+            <div class="text-[10px] font-bold text-jira-muted uppercase tracking-widest px-3 mb-2">Platform Administration</div>
+            
+            <a href="{% url 'superadmin_dashboard' %}" class="sidebar-item active">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                Dashboard
+            </a>
+            
+            <a href="{% url 'manage_companies' %}" class="sidebar-item">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                Manage Tenants
+            </a>
+            
+            <a href="{% url 'create_company' %}" class="sidebar-item">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Provision Tenant
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-jira-border bg-slate-50">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-jira-primary/10 text-jira-primary font-bold rounded-sm flex items-center justify-center border border-jira-primary/20">
+                    {{ request.user.username|make_list|first|upper }}
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-bold truncate leading-tight">{{ request.user.username }}</p>
+                    <span class="status-badge bg-blue-100 text-blue-700">SuperAdmin</span>
+                </div>
+            </div>
+            
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="w-full text-left text-xs font-bold text-jira-muted hover:text-red-600 transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    SIGN OUT SYSTEM
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- ⚡ MAIN CONTENT -->
+    <main class="flex-1 ml-64 p-8">
+        <div class="max-w-[1600px] mx-auto lg:px-6">
+            
+            <!-- Header -->
+            <header class="flex justify-between items-center mb-10 pb-6 border-b border-jira-border">
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight">System Oversight Dashboard</h1>
+                    <p class="text-sm text-jira-muted mt-1 font-medium">Real-time health and tenant infrastructure overview</p>
+                </div>
+                <div class="flex gap-4">
+                    <a href="{% url 'create_company' %}" class="btn-jira-primary flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        New Instance
+                    </a>
+                </div>
+            </header>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="card-jira">
+                    <div class="flex justify-between items-start mb-4">
+                        <p class="text-xs font-bold text-jira-muted uppercase tracking-wider">Total Tenants</p>
+                        <div class="p-2 bg-blue-50 text-jira-primary rounded-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                        </div>
+                    </div>
+                    <h3 class="text-3xl font-bold">{{ company_count }}</h3>
+                    <p class="text-[10px] text-jira-muted mt-2 font-black uppercase tracking-tighter">Registered Organizations</p>
+                </div>
+
+                <div class="card-jira">
+                    <div class="flex justify-between items-start mb-4">
+                        <p class="text-xs font-bold text-jira-muted uppercase tracking-wider">Operational Instances</p>
+                        <div class="p-2 bg-green-50 text-green-600 rounded-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                    </div>
+                    <h3 class="text-3xl font-bold">{{ active_companies }}</h3>
+                    <div class="flex items-center gap-2 mt-2">
+                        <span class="status-badge bg-green-100 text-green-700">Healthy</span>
+                        <span class="text-[10px] text-jira-muted font-bold">{{ inactive_companies }} suspended</span>
+                    </div>
+                </div>
+
+                <div class="card-jira">
+                    <div class="flex justify-between items-start mb-4">
+                        <p class="text-xs font-bold text-jira-muted uppercase tracking-wider">Managed Entities</p>
+                        <div class="p-2 bg-purple-50 text-purple-600 rounded-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                        </div>
+                    </div>
+                    <h3 class="text-3xl font-bold">{{ total_users }}</h3>
+                    <p class="text-[10px] text-jira-muted mt-2 font-black uppercase tracking-tighter">Verified across all nodes</p>
+                </div>
+            </div>
+
+            <!-- Detailed Grid Area -->
+            <div class="grid grid-cols-1 gap-8">
+                <div class="card-jira">
+                     <h3 class="text-sm font-bold uppercase tracking-widest text-jira-muted mb-6 border-b border-jira-border pb-4">Infrastructure Updates</h3>
+                     <!-- Placeholder for recent activity -->
+                     <div class="space-y-4">
+                         <div class="flex items-center gap-4 py-2 border-b border-slate-50 last:border-0">
+                             <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                             <div class="flex-1">
+                                 <p class="text-sm font-medium">New organization instance initialized: Acme Cloud Services</p>
+                                 <span class="text-xs text-jira-muted font-medium">Just now</span>
+                             </div>
+                         </div>
+                         <div class="flex items-center gap-4 py-2 border-b border-slate-50 last:border-0">
+                             <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                             <div class="flex-1">
+                                 <p class="text-sm font-medium">System nodes health check: All 12 clusters optimal</p>
+                                 <span class="text-xs text-jira-muted font-medium">14 minutes ago</span>
+                             </div>
+                         </div>
+                     </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>

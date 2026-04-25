@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6 w-full max-w-2xl mx-auto">
+        <a href="{% url 'ticket-list' %}" class="text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-2 transition">
+            &larr; Back to Tickets
+        </a>
+    </div>
+    <div class="bg-white rounded shadow-lg p-6 w-full max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Reassign Ticket: {{ ticket.title }}</h1>
+
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+
+            <div>
+                <label class="block font-semibold mb-2">Current Assignee</label>
+                <p class="text-lg bg-gray-100 p-2 rounded">{{ ticket.assignee.username }}</p>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-2">Reassign To</label>
+                {{ form.assignee }}
+            </div>
+
+            <div class="flex gap-4 pt-4">
+                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+                    Reassign Ticket
+                </button>
+                <a href="{% url 'ticket-detail' ticket.id %}" class="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700">
+                    Cancel
+                </a>
+            </div>
+        </form>
+
+        {% if form.errors %}
+        <div class="mt-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <p class="font-semibold">Errors:</p>
+            {{ form.errors }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    select {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 0.375rem;
+    }
+</style>
+{% endblock %}
